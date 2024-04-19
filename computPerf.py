@@ -2,7 +2,7 @@ import modele
 import os
 import json
 
-dossier_image = "./Images"
+dossier_image = "./Images/validation"
 dossier_image_etiquettes = "./Images_etiquettes"
 
 def test() :
@@ -72,3 +72,82 @@ print(comp_tab(['piece20', 'piece5', 'piece2'],['piece5', 'piece2', 'piece20']))
 
 precision = test()
 print(f"Pourcentage de précision global : {precision}%")
+
+def trouve_centre_piece(piece) :
+    nb_points = nb_points = len(piece["points"])
+    if nb_points == 0:
+        return None  # Gestion d'une liste vide
+
+    somme_x = sum(point[0] for point in piece["points"])
+    somme_y = sum(point[1] for point in piece["points"])
+
+    centre_x = somme_x / nb_points
+    centre_y = somme_y / nb_points
+
+    return (centre_x, centre_y)
+
+piece = {
+      "label": "piece2e",
+      "points": [
+        [
+          513.0,
+          512.0
+        ],
+        [
+          557.0,
+          504.0
+        ],
+        [
+          603.0,
+          510.0
+        ],
+        [
+          635.0,
+          536.0
+        ],
+        [
+          667.0,
+          572.0
+        ],
+        [
+          673.0,
+          618.0
+        ],
+        [
+          667.0,
+          666.0
+        ],
+        [
+          633.0,
+          710.0
+        ],
+        [
+          589.0,
+          728.0
+        ],
+        [
+          529.0,
+          730.0
+        ],
+        [
+          479.0,
+          704.0
+        ],
+        [
+          447.0,
+          650.0
+        ],
+        [
+          449.0,
+          578.0
+        ],
+        [
+          475.0,
+          538.0
+        ]
+      ],
+      "shape_type": "polygon",
+      "flags": {}
+    }
+
+print(trouve_centre_piece(piece))
