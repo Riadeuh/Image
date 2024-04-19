@@ -31,7 +31,8 @@ def test() :
             donnees = json.load(f)
         
         for label in donnees["shapes"] :
-            tab_pieces_etiquettes.append(label["label"])
+            tab_pieces_etiquettes.append((label["label"], trouve_centre_piece(label)))
+
         
         print(tab_pieces_etiquettes)
 
@@ -68,12 +69,16 @@ def comp_tab(tab_e,tab_n) :
     
     return f"{common_elements_count}/{len(tab_e)}"
 
-print(comp_tab(['piece20', 'piece5', 'piece2'],['piece5', 'piece2', 'piece20']))
-
-precision = test()
-print(f"Pourcentage de précision global : {precision}%")
-
 def trouve_centre_piece(piece) :
+    """Trouve pour une pièce son centre en fonction des coordonnées établies sur label.me
+
+    Args :
+      piece : pièce dont on veut trouver le centre
+
+    Returns : 
+      Le point central de la pièce
+    
+    """
     nb_points = nb_points = len(piece["points"])
     if nb_points == 0:
         return None  # Gestion d'une liste vide
@@ -85,6 +90,11 @@ def trouve_centre_piece(piece) :
     centre_y = somme_y / nb_points
 
     return (centre_x, centre_y)
+
+print(comp_tab([('piece20',(381,476)),('piece1',(400,500))],[('piece1',(400,500)),('piece20',(381,476))]))
+
+#precision = test()
+#print(f"Pourcentage de précision global : {precision}%")
 
 piece = {
       "label": "piece2e",
@@ -151,3 +161,5 @@ piece = {
     }
 
 print(trouve_centre_piece(piece))
+
+#Essayer de comparer le centre a 20 000 pixels pres pour une précision plus grande
