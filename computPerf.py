@@ -51,23 +51,43 @@ def test() :
 
 
 
-def comp_tab(tab_e,tab_n) :
-    """Compare le tableau de pièces étiquettées et le tableau de pièces résultant de l'algo
+def comp_tab(tab_e, tab_n):
+    """Compare le tableau de tuples de pièces étiquettées et le tableau de tuples de pièces résultant de l'algo
 
     Args :
         tab_e (tab) : tableau de pièces étiquettées
         tab_n (tab) : tableau de pièces normal
 
     Returns :
-        Le ratio de pièces correctement détéctées
-
+        Le ratio de pièces correctement détectées
     """
-    set1 = set(tab_e)
-    set2 = set(tab_n)
+    set1 = set((nom_piece, coordonnees) for nom_piece, coordonnees in tab_e)
+    set2 = set((nom_piece, coordonnees) for nom_piece, coordonnees in tab_n)
     
-    common_elements_count = sum(1 for elem in set1 if elem in set2)
+    common_elements_count = sum(1 for nom_piece, coordonnees in set1 if any(incertitude(coordonnees, coord) for coord in set2))
     
     return f"{common_elements_count}/{len(tab_e)}"
+
+def incertitude(coordonnee1, coordonnee2):
+    """Vérifie si la coordonnée 1 est dans un rayon de 100 pixels de la coordonnée 2.
+
+    Args:
+        coordonnee1 (tuple): Coordonnée 1 sous forme de tuple (x, y).
+        coordonnee2 (tuple): Coordonnée 2 sous forme de tuple (x, y).
+
+    Returns:
+        bool: True si la coordonnée 1 est dans un rayon de 100 pixels de la coordonnée 2, False sinon.
+    """
+    print(coordonnee1[0])
+    print(coordonnee1[1])
+    print(coordonnee2[0])
+    print(coordonnee2[1])
+    return True
+    #distance = ((coordonnee1[0] - coordonnee2[0]) ** 2 + (coordonnee1[1] - coordonnee2[1]) ** 2) ** 0.5
+    #return distance <= 100
+
+
+    
 
 def trouve_centre_piece(piece) :
     """Trouve pour une pièce son centre en fonction des coordonnées établies sur label.me
@@ -162,4 +182,4 @@ piece = {
 
 print(trouve_centre_piece(piece))
 
-#Essayer de comparer le centre a 20 000 pixels pres pour une précision plus grande
+#Essayer de comparer le centre a 100 pixels pres pour une précision plus grande
