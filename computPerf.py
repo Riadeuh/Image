@@ -115,8 +115,8 @@ def trouve_centre_piece(piece) :
 
     return (centre_x, centre_y)
 
-#precision = test()
-#print(f"Pourcentage de précision global : {precision}%")
+precision = test()
+print(f"Pourcentage de précision global : {precision}%")
 
 piece = {
       "label": "piece2e",
