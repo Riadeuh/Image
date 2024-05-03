@@ -2,8 +2,8 @@ import modele
 import os
 import json
 
-dossier_image = "./Images/validation"
-dossier_image_etiquettes = "./Images_etiquettes"
+dossier_image = "./Images"
+dossier_image_etiquettes = "./Images_etiquettes/validation"
 
 def test() :
     """Calcule la véracité de l'algorithme de reconnaissance
@@ -37,7 +37,7 @@ def test() :
         print(tab_pieces_etiquettes)
 
         #création de la variable qui va contenir les pieces de chaque images
-        tab_pieces = modele.modele(donnees["imagePath"])
+        tab_pieces = []
 
         ratio = comp_tab(tab_pieces_etiquettes, tab_pieces)
         print(f"Ratio de précision pour l'image {image}: {ratio}")
@@ -63,10 +63,19 @@ def comp_tab(tab_e, tab_n):
     """
     set1 = set((nom_piece, coordonnees) for nom_piece, coordonnees in tab_e)
     set2 = set((nom_piece, coordonnees) for nom_piece, coordonnees in tab_n)
-    
-    common_elements_count = sum(1 for nom_piece, coordonnees in set1 if any(incertitude(coordonnees, coord) for coord in set2))
-    
+
+    common_elements_count = 0  # Initialiser le compteur
+
+    # Parcourir chaque nom de pièce dans set1
+    for nom_piece,coordonnees in set1:
+        # Vérifier si au moins une coordonnée de set2 est dans un rayon de 100 pixels de la pièce actuelle
+        for nom_pieces, coord in set2:
+            if nom_piece == nom_pieces:
+                if incertitude(coordonnees, coord):
+                    common_elements_count += 1  # Incrémenter le compteur
+
     return f"{common_elements_count}/{len(tab_e)}"
+
 
 def incertitude(coordonnee1, coordonnee2):
     """Vérifie si la coordonnée 1 est dans un rayon de 100 pixels de la coordonnée 2.
@@ -78,16 +87,11 @@ def incertitude(coordonnee1, coordonnee2):
     Returns:
         bool: True si la coordonnée 1 est dans un rayon de 100 pixels de la coordonnée 2, False sinon.
     """
-    print(coordonnee1[0])
-    print(coordonnee1[1])
-    print(coordonnee2[0])
-    print(coordonnee2[1])
-    return True
-    #distance = ((coordonnee1[0] - coordonnee2[0]) ** 2 + (coordonnee1[1] - coordonnee2[1]) ** 2) ** 0.5
-    #return distance <= 100
+    distance = ((coordonnee1[0] - coordonnee2[0]) ** 2 + (coordonnee1[1] - coordonnee2[1]) ** 2) ** 0.5
+    return distance <= 100
 
+print(comp_tab([('piece20',(381,476)),('piece1',(400,500)),('piece1e',(850,500))],[('piece1',(400,500)),('piece20',(381,476)),('piece1e',(800,500))]))
 
-    
 
 def trouve_centre_piece(piece) :
     """Trouve pour une pièce son centre en fonction des coordonnées établies sur label.me
@@ -110,8 +114,6 @@ def trouve_centre_piece(piece) :
     centre_y = somme_y / nb_points
 
     return (centre_x, centre_y)
-
-print(comp_tab([('piece20',(381,476)),('piece1',(400,500))],[('piece1',(400,500)),('piece20',(381,476))]))
 
 #precision = test()
 #print(f"Pourcentage de précision global : {precision}%")
@@ -179,7 +181,3 @@ piece = {
       "shape_type": "polygon",
       "flags": {}
     }
-
-print(trouve_centre_piece(piece))
-
-#Essayer de comparer le centre a 100 pixels pres pour une précision plus grande

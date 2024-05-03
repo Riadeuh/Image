@@ -31,8 +31,8 @@ def detect_circles(img):
     return cimg
 
 
-img=cv2.imread ("Images/validation/270.jpg");
-hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+img=cv2.imread ("Images/242.jpg");
+hsv = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
 h,s,v= cv2.split(hsv)
 ret_h, th_h = cv2.threshold(h,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
 ret_s, th_s = cv2.threshold(s,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
@@ -54,18 +54,17 @@ th = th | im_floodfill_inv
 th=th[bordersize: len(th)-bordersize,bordersize: len(th[0])-bordersize]
 resultat=cv2.bitwise_and(img,img,mask = th)
 image_noir = to_black_n_white(resultat)
-print(image_noir[1007][521])
-plt.imshow(img)
+plt.imshow(image_noir)
 plt.show()
-"""contours, hierarchy = cv2.findContours(th,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+contours, hierarchy = cv2.findContours(th,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
 for i in range (0, len(contours)) :
     mask_BB_i = np.zeros((len(th),len(th[0])), np.uint8)
     x,y,w,h = cv2.boundingRect(contours[i])
-    cv2.drawContours(mask_BB_i, contours, i, (255,255,255), -1)
+    cv2.drawContours(mask_BB_i, contours, i, (0,0,0), -1)
     BB_i=cv2.bitwise_and(img,img,mask=mask_BB_i)
     if h >15 and w>15 :
         BB_i=BB_i[y:y+h,x:x+w]
         plt.imshow(BB_i)
-        plt.show()"""
+        plt.show()
 
 
